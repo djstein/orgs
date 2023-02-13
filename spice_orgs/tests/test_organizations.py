@@ -47,7 +47,6 @@ class ListOrganizationTest(OrganizationTestCase):
             {
                 "items": [
                     {
-                        "id": str(organization.id),
                         "name": organization.name,
                         "slug": organization.slug,
                         "publicly_visible": organization.publicly_visible,
@@ -105,13 +104,11 @@ class ListOrganizationTest(OrganizationTestCase):
             {
                 "items": [
                     {
-                        "id": str(organization_1.id),
                         "name": organization_1.name,
                         "slug": organization_1.slug,
                         "publicly_visible": organization_1.publicly_visible,
                     },
                     {
-                        "id": str(organization_2.id),
                         "name": organization_2.name,
                         "slug": organization_2.slug,
                         "publicly_visible": organization_2.publicly_visible,
@@ -132,7 +129,6 @@ class ListOrganizationTest(OrganizationTestCase):
             {
                 "items": [
                     {
-                        "id": str(organization_1.id),
                         "name": organization_1.name,
                         "slug": organization_1.slug,
                         "publicly_visible": organization_1.publicly_visible,

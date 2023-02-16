@@ -16,7 +16,8 @@ class Member(models.Model):
     id = models.UUIDField(
         verbose_name=_("UUID"),
         help_text=_(
-            "Unique ID for this particular user + organization/team mapping across whole system"
+            "Unique ID for this particular user + organization/team mapping across"
+            " whole system"
         ),
         primary_key=True,
         default=uuid4,
@@ -163,7 +164,8 @@ class TeamMember(models.Model):
     id = models.UUIDField(
         verbose_name=_("UUID"),
         help_text=_(
-            "Unique ID for this particular user + organization/team mapping across whole system"
+            "Unique ID for this particular user + organization/team mapping across"
+            " whole system"
         ),
         primary_key=True,
         default=uuid4,
@@ -212,7 +214,10 @@ class TeamMember(models.Model):
         unique_together = ["organization", "team", "member"]
 
     def __str__(self) -> str:
-        return f"{self.organization.slug} | {self.team.slug} | {self.member.user.username} | {self.role}"
+        return (
+            f"{self.organization.slug} | {self.team.slug} |"
+            f" {self.member.user.username} | {self.role}"
+        )
 
 
 class Team(models.Model):

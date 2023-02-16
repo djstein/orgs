@@ -56,9 +56,8 @@ load-plugins = [
     "pylint.extensions.code_style",
     "pylint.extensions.typing",
     "pylint_django",
-    "pylint_celery",
 ]
-django-settings-module = "config.settings"
+django-settings-module = "spice_orgs.tests.settings"
 
 [tool.pylint."MESSAGES CONTROL"]
 # Reasons disabled:

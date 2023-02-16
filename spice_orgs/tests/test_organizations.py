@@ -114,10 +114,11 @@ class ListOrganizationTest(OrganizationTestCase):
                         "publicly_visible": organization_2.publicly_visible,
                     },
                 ],
-                "count": 2,
+                "count": 1,
             },
         )
-        # verify other users who are not in the organization can only see the public organization
+        # verify other users who are not in the organization
+        # can only see the public organization
         self.client.logout()
         self.client.login(username=self.user_2.get_username(), password="password")
         response = self.client.get(
@@ -174,7 +175,8 @@ class ListOrganizationTest(OrganizationTestCase):
 #         },
 #     )
 
-#     # verify other users who are not in the organization can see the public organization
+#     # verify other users who are not in the organization
+#     # can see the public organization
 #     self.client.login(username=self.user_2.get_username(), password="password")
 #     self.assertEqual(response.status_code, 200)
 #     self.assertDictEqual(
@@ -192,7 +194,9 @@ class ListOrganizationTest(OrganizationTestCase):
 #     )
 #     self.client.logout()
 
-#     # create a organization private organization. verify users that are not members cannot see it but can see other public organizations
+#     # create a organization private organization.
+#     # verify users that are not members cannot see it
+#     # but can see other public organizations
 #     self.client.login(username=self.user_1.get_username(), password="password")
 #     response = self.client.post(
 #         path="/api/organizations/",

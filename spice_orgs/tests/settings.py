@@ -1,5 +1,7 @@
+import os
+
 ROOT_URLCONF = "spice_orgs.tests.urls"
-SECRET_KEY = "TEST_KEY"
+SECRET_KEY = os.environ.get("SECRET_KEY", "TEST_KEY")
 INSTALLED_APPS = (
     "django.contrib.auth",
     "django.contrib.contenttypes",

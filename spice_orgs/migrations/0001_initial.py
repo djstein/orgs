@@ -8,7 +8,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -24,7 +23,10 @@ class Migration(migrations.Migration):
                     models.UUIDField(
                         default=uuid.uuid4,
                         editable=False,
-                        help_text="Unique ID for this particular organization across whole system",
+                        help_text=(
+                            "Unique ID for this particular organization across whole"
+                            " system"
+                        ),
                         primary_key=True,
                         serialize=False,
                         verbose_name="UUID",
@@ -97,7 +99,9 @@ class Migration(migrations.Migration):
                     models.UUIDField(
                         default=uuid.uuid4,
                         editable=False,
-                        help_text="Unique ID for this particular team across whole system",
+                        help_text=(
+                            "Unique ID for this particular team across whole system"
+                        ),
                         primary_key=True,
                         serialize=False,
                         verbose_name="UUID",
@@ -141,7 +145,9 @@ class Migration(migrations.Migration):
                     "visible_to_organization",
                     models.BooleanField(
                         default=False,
-                        help_text="Is this team visible to the others in the organization",
+                        help_text=(
+                            "Is this team visible to the others in the organization"
+                        ),
                         verbose_name="Visible to Organization",
                     ),
                 ),
@@ -178,7 +184,10 @@ class Migration(migrations.Migration):
                     models.UUIDField(
                         default=uuid.uuid4,
                         editable=False,
-                        help_text="Unique ID for this particular user + organization/team mapping across whole system",
+                        help_text=(
+                            "Unique ID for this particular user + organization/team"
+                            " mapping across whole system"
+                        ),
                         primary_key=True,
                         serialize=False,
                         verbose_name="UUID",
@@ -196,7 +205,9 @@ class Migration(migrations.Migration):
                     "updated_at",
                     models.DateTimeField(
                         auto_now=True,
-                        help_text="When the user's organization details was last updated",
+                        help_text=(
+                            "When the user's organization details was last updated"
+                        ),
                         verbose_name="Updated At",
                     ),
                 ),
@@ -214,7 +225,10 @@ class Migration(migrations.Migration):
                     "publicly_visible",
                     models.BooleanField(
                         default=False,
-                        help_text="Is this user's membership in this organization/team publicly visible",
+                        help_text=(
+                            "Is this user's membership in this organization/team"
+                            " publicly visible"
+                        ),
                         verbose_name="Publicly Visible",
                     ),
                 ),
@@ -251,7 +265,10 @@ class Migration(migrations.Migration):
                     models.UUIDField(
                         default=uuid.uuid4,
                         editable=False,
-                        help_text="Unique ID for this particular user + organization/team mapping across whole system",
+                        help_text=(
+                            "Unique ID for this particular user + organization/team"
+                            " mapping across whole system"
+                        ),
                         primary_key=True,
                         serialize=False,
                         verbose_name="UUID",
@@ -269,7 +286,9 @@ class Migration(migrations.Migration):
                     "updated_at",
                     models.DateTimeField(
                         auto_now=True,
-                        help_text="When the user's organization details was last updated",
+                        help_text=(
+                            "When the user's organization details was last updated"
+                        ),
                         verbose_name="Updated At",
                     ),
                 ),

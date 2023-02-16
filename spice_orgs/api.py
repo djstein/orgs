@@ -50,7 +50,8 @@ def get_organization_details_by_slug(request, organization_slug: str):
     By default, returns details for active, publicly available ones.
     Else, returns the details of the organization if the user is a member.
 
-    The happy path is that the organization exists and the user is a member of it, so search for that first.
+    The happy path is that the organization exists
+    and the user is a member of it, so search for that first.
     Then search for the organization and if it is active and publicly visible.
     """
 
@@ -63,8 +64,10 @@ def get_organization_details_by_slug(request, organization_slug: str):
             return Organization.objects.get(
                 slug=organization_slug, is_active=True, publicly_visible=True
             )
-        except Organization.DoesNotExist:
-            raise Http404(f"Organization not found for slug: {organization_slug}")
+        except Organization.DoesNotExist as exception:
+            raise Http404(
+                f"Organization not found for slug: {organization_slug}"
+            ) from exception
 
 
 @router.post("/", response=OrganizationSchema)
@@ -148,18 +151,20 @@ def list_organization_members(request, organization_slug: str):
             ).exists()
         ):
             return organization.member_set.filter()
-        else:
-            # else return only publicly visible members
-            return organization.member_set.filter(publicly_visible=True)
+        # else return only publicly visible members
+        return organization.member_set.filter(publicly_visible=True)
     except Organization.DoesNotExist:
         try:
-            # if the organization is active and publicly visible, return only publicly visible members
+            # if the organization is active and publicly visible,
+            # return only publicly visible members
             organization = Organization.objects.get(
                 slug=organization_slug, is_active=True, publicly_visible=True
             )
             return organization.member_set.filter(publicly_visible=True)
-        except Organization.DoesNotExist:
-            raise Http404(f"Organization not found for slug: {organization_slug}")
+        except Organization.DoesNotExist as exception:
+            raise Http404(
+                f"Organization not found for slug: {organization_slug}"
+            ) from exception
 
 
 @router.post("/{organization_slug}/members/", response=MemberSchema)
@@ -252,12 +257,11 @@ def team_details(request, organization_slug: str, team_slug: str):
         user=request_user, role=Member.MemberRole.OWNER
     ):
         return organization.team_set.get(is_active=True, slug=team_slug)
-    else:
-        return organization.team_set.get(
-            is_active=True,
-            visible_to_organization=True,
-            slug=team_slug,
-        )
+    return organization.team_set.get(
+        is_active=True,
+        visible_to_organization=True,
+        slug=team_slug,
+    )
 
 
 @router.post("/{organization_slug}/teams/", response=TeamSchema)
@@ -300,13 +304,13 @@ def update_team(
             is_active=True,
             member__user=request.user,
         )
-    except Organization.DoesNotExist:
-        raise Http404("Organization does not exist")
+    except Organization.DoesNotExist as exception:
+        raise Http404("Organization does not exist") from exception
 
     try:
         team = organization.team_set.get(is_active=True, slug=team_slug)
-    except Team.DoesNotExist:
-        raise Http404("Team does not exist for this organization")
+    except Team.DoesNotExist as exception:
+        raise Http404("Team does not exist for this organization") from exception
 
     if not (
         request_user.is_superuser
@@ -333,13 +337,13 @@ def list_team_members(request, organization_slug: str, team_slug: str):
             is_active=True,
             member__user=request.user,
         )
-    except Organization.DoesNotExist:
-        raise Http404("Organization does not exist")
+    except Organization.DoesNotExist as exception:
+        raise Http404("Organization does not exist") from exception
 
     try:
         team = organization.team_set.get(is_active=True, slug=team_slug)
-    except Team.DoesNotExist:
-        raise Http404("Team does not exist for this organization")
+    except Team.DoesNotExist as exception:
+        raise Http404("Team does not exist for this organization") from exception
 
     if not (
         request_user.is_superuser
@@ -367,13 +371,13 @@ def add_member_to_team(
             is_active=True,
             member__user=request.user,
         )
-    except Organization.DoesNotExist:
-        raise Http404("Organization does not exist")
+    except Organization.DoesNotExist as exception:
+        raise Http404("Organization does not exist") from exception
 
     try:
         team = organization.team_set.get(is_active=True, slug=team_slug)
-    except Team.DoesNotExist:
-        raise Http404("Team does not exist for this organization")
+    except Team.DoesNotExist as exception:
+        raise Http404("Team does not exist for this organization") from exception
 
     if not (
         request_user.is_superuser
@@ -399,13 +403,13 @@ def remove_member_from_team(
             is_active=True,
             member__user=request.user,
         )
-    except Organization.DoesNotExist:
-        raise Http404("Organization does not exist")
+    except Organization.DoesNotExist as exception:
+        raise Http404("Organization does not exist") from exception
 
     try:
         team = organization.team_set.get(is_active=True, slug=team_slug)
-    except Team.DoesNotExist:
-        raise Http404("Team does not exist for this organization")
+    except Team.DoesNotExist as exception:
+        raise Http404("Team does not exist for this organization") from exception
 
     if not (
         request_user.is_superuser
@@ -434,13 +438,13 @@ def update_member_in_team(
             is_active=True,
             member__user=request.user,
         )
-    except Organization.DoesNotExist:
-        raise Http404("Organization does not exist")
+    except Organization.DoesNotExist as exception:
+        raise Http404("Organization does not exist") from exception
 
     try:
         team = organization.team_set.get(is_active=True, slug=team_slug)
-    except Team.DoesNotExist:
-        raise Http404("Team does not exist for this organization")
+    except Team.DoesNotExist as exception:
+        raise Http404("Team does not exist for this organization") from exception
 
     if not (
         request_user.is_superuser

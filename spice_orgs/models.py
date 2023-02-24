@@ -127,7 +127,7 @@ class Organization(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         super().save(*args, **kwargs)
-        if not self.member_set.count() == 0:
+        if self.member_set.count() == 0:
             self.add_user_to_organization(
                 username=self.created_by.username, role=Member.MemberRole.OWNER
             )

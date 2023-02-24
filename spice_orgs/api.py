@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 from django.http import Http404, HttpResponseForbidden
 from ninja import Router
 from ninja.pagination import paginate
+from ninja.security import django_auth
 
 from .models import Member, Organization, Team, TeamMember
 from .schema import (
@@ -70,7 +71,7 @@ def get_organization_details_by_slug(request, organization_slug: str):
             ) from exception
 
 
-@router.post("/", response=OrganizationSchema)
+@router.post("/", response=OrganizationSchema, auth=django_auth)
 def create_organization(
     request,
     payload: CreateUpdateOrganizationSchema,
@@ -84,7 +85,7 @@ def create_organization(
     return organization
 
 
-@router.patch("/{organization_slug}/", response=OrganizationSchema)
+@router.patch("/{organization_slug}/", response=OrganizationSchema, auth=django_auth)
 def update_organization_details(
     request, organization_slug: str, payload: CreateUpdateOrganizationSchema
 ):
@@ -109,7 +110,7 @@ def update_organization_details(
         )
 
 
-@router.delete("/{organization_slug}/", response=bool)
+@router.delete("/{organization_slug}/", response=bool, auth=django_auth)
 def delete_organization(request, organization_slug: str):
     """
     Delete an Organization if user is an owner.
@@ -167,7 +168,7 @@ def list_organization_members(request, organization_slug: str):
             ) from exception
 
 
-@router.post("/{organization_slug}/members/", response=MemberSchema)
+@router.post("/{organization_slug}/members/", response=MemberSchema, auth=django_auth)
 def add_member_to_organization(
     request, organization_slug: str, payload: AddMemberSchema
 ):
@@ -185,7 +186,11 @@ def add_member_to_organization(
     )
 
 
-@router.patch("/{organization_slug}/members/{member_username}", response=MemberSchema)
+@router.patch(
+    "/{organization_slug}/members/{member_username}",
+    response=MemberSchema,
+    auth=django_auth,
+)
 def update_member_in_organization(
     request, organization_slug: str, member_username: str, payload: UpdateMemberSchema
 ):
@@ -205,7 +210,9 @@ def update_member_in_organization(
     return member
 
 
-@router.delete("/{organization_slug}/members/{member_username}", response=bool)
+@router.delete(
+    "/{organization_slug}/members/{member_username}", response=bool, auth=django_auth
+)
 def remove_member_from_organization(
     request, organization_slug: str, member_username: str
 ):
@@ -264,7 +271,7 @@ def team_details(request, organization_slug: str, team_slug: str):
     )
 
 
-@router.post("/{organization_slug}/teams/", response=TeamSchema)
+@router.post("/{organization_slug}/teams/", response=TeamSchema, auth=django_auth)
 def create_team(request, organization_slug: str, payload: CreateUpdateTeamSchema):
     request_user = request.user
     organization = Organization.objects.get(
@@ -281,7 +288,9 @@ def create_team(request, organization_slug: str, payload: CreateUpdateTeamSchema
     return team
 
 
-@router.delete("/{organization_slug}/teams/{team_slug}", response=TeamSchema)
+@router.delete(
+    "/{organization_slug}/teams/{team_slug}", response=TeamSchema, auth=django_auth
+)
 def delete_team(request, organization_slug: str, team_slug: str):
     request_user = request.user
     team = Team.objects.get(organization_slug=organization_slug, slug=team_slug)
@@ -293,7 +302,9 @@ def delete_team(request, organization_slug: str, team_slug: str):
     return team
 
 
-@router.patch("/{organization_slug}/teams/{team_slug}", response=TeamSchema)
+@router.patch(
+    "/{organization_slug}/teams/{team_slug}", response=TeamSchema, auth=django_auth
+)
 def update_team(
     request, organization_slug: str, team_slug: str, payload: CreateUpdateTeamSchema
 ):
@@ -359,7 +370,9 @@ def list_team_members(request, organization_slug: str, team_slug: str):
 
 
 @router.post(
-    "/{organization_slug}/teams/{team_slug}/members/", response=TeamMemberSchema
+    "/{organization_slug}/teams/{team_slug}/members/",
+    response=TeamMemberSchema,
+    auth=django_auth,
 )
 def add_member_to_team(
     request, organization_slug: str, team_slug: str, payload: AddTeamMemberSchema
@@ -392,6 +405,7 @@ def add_member_to_team(
 @router.delete(
     "/{organization_slug}/teams/{team_slug}/members/{username}",
     response=bool,
+    auth=django_auth,
 )
 def remove_member_from_team(
     request, organization_slug: str, team_slug: str, username: str
@@ -423,6 +437,7 @@ def remove_member_from_team(
 @router.patch(
     "/{organization_slug}/teams/{team_slug}/members/{username}",
     response=TeamMemberSchema,
+    auth=django_auth,
 )
 def update_member_in_team(
     request,
